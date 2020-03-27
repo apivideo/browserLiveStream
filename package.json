@@ -1,0 +1,10 @@
+{
+  "name": "rtc2rtmp",
+  "version": "0.0.1",
+  "description": "mediarecorder -> websocket -> rtmp",
+  "dependencies": {
+    "express": "^4.10.2",
+    "fluent-ffmpeg": "^2.0.1",
+    "socket.io": "^1.3.7"
+  }
+}
