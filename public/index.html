@@ -5,44 +5,59 @@
 <head>
 	<title>Live Stream From the Browser</title>
 	<script src="socket.io.js"></script>
+	<link rel="stylesheet" href="style.css">
+	<link rel="icon" href="icon.ico">
 </head>
 <body style="max-width:1600px;height:100%;margin:auto;">
-<h1>
+<header class="header"
+><h1 >
 Start a Live Stream!
-</h1>
-<label for="option_width" >Size:</label>
-<input type="text" id="option_width" value="352"/> &times;
-<input type="text" id="option_height" value="240"/>
+</h1 >
+</header>
+<h2>
+To start a live stream:
+<ul>
+	<li>Choose the size of the video you are uploading.  Big is awesome, but too big, and the server cannot transcode the video fast enough.
+<li> Enter the RTMP Destination for your api.video stream.  Youl'l find this at by clicking on your <a href="https://go.api.video/livestreams/">livestream</a>.<br/>
+<li> When you are ready press "Start Streaming."
+</ul>
+</h2>
+<hr/>	
+<br><label for="option_width" class="form">Size:</label>
+<input class="form" type="text" id="option_width" value="352"/> &times;
+<input class="form" type="text" id="option_height" value="240"/>
+<br><br>
+<label class="form" for="option_framerate">Frame Rate:</label>
+<input class="form" type="text" id="option_framerate" value="15"/>
+<br><br>
+<input class="form" type="hidden" id="socket.io_address" value="/"/>
+<label class="form" for="option_url" >RTMP Destination:</label>
+<input class="form" type="text" id="option_url" style="width:33%" value="rtmp://broadcast.api.video/s/30087931-229e-42cf-b5f9-e91bcc1f7332"/>
 <br>
-<input type="hidden" id="socket.io_address" value="/"/>
-<label for="option_url" >RTMP Destination:</label>
-<input type="text" id="option_url" style="width:33%" value="rtmp://broadcast.api.video/s/30087931-229e-42cf-b5f9-e91bcc1f7332"/>
+<input class="form" type="checkbox"  id="checkbox_Reconection" checked="true">
+<label class="form">Reconnection </label>
+<br>
+<div class="form" >
+Connect the server, then start streaming.  
+</div><br/>
+<button class="form" id="button_server">Connect Server</button> 
+<button class="form" id="button_start" >Start Streaming</button>
 
-<input type="checkbox"  id="checkbox_Reconection" checked="true">Reconnection 
-<br>
-Connect the server, then start streaming.  <br/>
-<button id="button_server">Connect_server</button>
-<button id="button_start" >Start streaming</button>
-<br/>
-Your live camera video will appear immediately.  
+
 <br/>
 <hr/>	
-After about 15 seconds start the live stream player.
-<br/>
-if in the status window - FFMPEG cannot get above 1x encoding - the livestream will begin to lag.  Use a smaller screen size, or change the frame rate in the Constraints variable.
 
-<hr/>
+<h2>Hint: Keep an eye on the status window, the encoding value must stay above 1x, or your stream will start to lag. Use a smaller screen size, or change the frame rate in the Constraints variable.
+</h2>
+
 <div>
 	<p id="output_message"></p>
 	
 	<video id="output_video" autoplay=true></video>
 	<video id="videoElement" preload="none"  ></video>
 </div>
-<div id="livestream" width = "50%">
-	<iframe src="https://embed.api.video/live/li400mYKSgQ6xs7taUeSaEKr" width="50%" height="50%" frameborder="0" scrolling="no" allowfullscreen=""></iframe><br/>
-	See the LiveStream At https://embed.api.video/live/li400mYKSgQ6xs7taUeSaEKr
-</div>
-<hr/>
+
+
 <textarea readonly="true" id="output_console" cols=91 rows=5>
 </textarea>
 
@@ -57,17 +72,25 @@ var output_console=document.getElementById('output_console'),
 	socketio_address=document.getElementById('socket.io_address'),
 	option_width=document.getElementById('option_width'),
 	option_height=document.getElementById('option_height'),
+	option_framerate=document.getElementById('option_framerate'),
 	button_start=document.getElementById('button_start'),
-	height=option_height.value,
-	width=option_width.value,
+
+height=parseInt(option_height.value),
+width=parseInt(option_width.value),
+framerate=parseInt(option_framerate.value),
 	//url=option_url.value='rtmp://'+location.host.split(':')[0]+':1935/live/test0';
-	url=option_url.value='rtmp://broadcast.api.video/s/30087931-229e-42cf-b5f9-e91bcc1f7332';
+	url=option_url.value;
+	
+	console.log("framerate", framerate);
 option_height.onchange=option_height.onkeyup=function(){height=1*this.value;}
-option_width.onchange=option_width.onkeyup=function(){width=1*this.value;}
+option_width.onchange=option_width.onkeyup=function(){width=1*this.value; console.log("width" +width);}
+option_framerate.onchange=option_framerate.onkeyup=function(){framerate=1*this.value; console.log("framerate" +framerate);}
 option_url.onchange=option_url.onkeyup=function(){url=this.value;}
 button_start.onclick=requestMedia;
 button_server.onclick=connect_server;
 
+//just start the server
+//connect_server;
 var mediaRecorder;
  var socket ;
  var state ="stop"; 
@@ -192,13 +215,16 @@ button_server.disabled=true;
 
 
 function requestMedia(){
+	var fr = navigator.mediaDevices.getSupportedConstraints().frameRate;
+	console.log("framerate support", fr);
 	var constraints = { audio: true,
 		video:{
-	        width: { min: width, ideal: width, max: width },
-	        height: { min: height, ideal: height, max: height },
-			frameRate: { ideal: 15, max: 20 },
+	        width: { min: 200, ideal: width, max: 1920 },
+	        height: { min: 200, ideal: height, max: 1080 },
+			frameRate: {min: 10, ideal: framerate, max: 60}
 	    }
 	};
+	console.log(constraints);
 	navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
 		video_show(stream);//only show locally, not remotely
 	
@@ -227,9 +253,20 @@ function requestMedia(){
 	}).catch(function(err) {
 		console.log('The following error occured: ' + err);
 		show_output('Local getUserMedia ERROR:'+err);
-		output_message.innerHTML="Local video source size is not soupport or No camera ?"+output_video.videoWidth+"x"+output_video.videoHeight;
+		output_message.innerHTML="Local video source size is not support or No camera ?"+output_video.videoWidth+"x"+output_video.videoHeight;
 		 state="stop";
 		 button_start.disabled=true;
+		button_server.disabled=false;
+	});
+}
+
+function stopStream(){
+	console.log("stop pressed:");
+	socket.on('disconnect', function () {
+		show_output('ERROR: server disconnected!');
+		mediaRecorder.stop();
+		state="stop";
+		button_start.disabled=true;
 		button_server.disabled=false;
 	});
 }

@@ -8,12 +8,13 @@ var app = express();
 var spawn = require('child_process').spawn;
 var fs = require('fs');
 
-app.use(express.static('static'));
-const server = require('https').createServer({
- key: fs.readFileSync('abels-key.pem'),
-  cert: fs.readFileSync('abels-cert.pem')
+app.use(express.static('public'));
+const server = require('http').createServer(//{
+ //key: fs.readFileSync('abels-key.pem'),
+ // cert: fs.readFileSync('abels-cert.pem')
  
-},app);
+	//},
+	app);
 //testing
 
 var io = require('socket.io')(server);
@@ -135,8 +136,8 @@ io.on('error',function(e){
 //  console.log('http and websocket listening on *:8888');
 //});
 
-server.listen(8443, function(){
-  console.log('https and websocket listening on *:8443');
+server.listen(8444, function(){
+  console.log('https and websocket listening on *:8444');
 });
 
 process.on('uncaughtException', function(err) {

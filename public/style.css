@@ -1,0 +1,61 @@
+.header {
+  text-align: center;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  width: 100%;
+  color: #FFFFFF;
+  background-image: linear-gradient(#FC601A, #FD8B25)
+  
+  }
+.formPadding{
+ padding: 2%;
+}
+  
+  
+.form {
+  font-size: 25px;
+  width: 90%;
+  background: #fff;
+  padding: 20px;
+ 
+  
+}
+input[type=text], input[type=url], input[type=email], input[type=password], input[type=tel], input[type=file] {
+  -webkit-appearance: none; -moz-appearance: none;
+  margin: 0;
+  width: 25%; height: 40px;
+  line-height: 40px;font-size: 25px;
+  
+}
+input[type=radio] {
+ width: 25px; height: 25px;
+ -webkit-border-radius: 22px; -moz-border-radius: 22px; border-radius: 22px;
+ border: 1px solid #bbb;
+}
+input[type=checkbox] {
+ width: 25px; height: 25px;
+ -webkit-border-radius: 22px; -moz-border-radius: 22px; border-radius: 22px;
+ border: 1px solid #bbb;
+}
+input[type=submit]{
+    -webkit-appearance: none; -moz-appearance: none;
+	line-height: 40px;font-size: 17px;
+    display: block;
+    margin: 1.5em 0;
+    font-size: 1em; line-height: 2.5em;
+    color: #333;
+    font-weight: bold;
+    height: 2.5em; width: 100%;
+    background: #fdfdfd; background: -moz-linear-gradient(top, #fdfdfd 0%, #bebebe 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fdfdfd), color-stop(100%,#bebebe)); background: -webkit-linear-gradient(top, #fdfdfd 0%,#bebebe 100%); background: -o-linear-gradient(top, #fdfdfd 0%,#bebebe 100%); background: -ms-linear-gradient(top, #fdfdfd 0%,#bebebe 100%); background: linear-gradient(to bottom, #fdfdfd 0%,#bebebe 100%);
+    border: 1px solid #bbb;
+    -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px;
+   }
+
+.input{
+ width: 75%;
+
+}
+.video{
+ width: 75%;
+ height:75%;
+}
