@@ -68,6 +68,19 @@ io.on('connection', function(socket){
 		}
 		
 		var ops=[
+			 '-i','-',
+			//'-c', 'copy', 
+			'-c:v', 'libx264', '-preset', 'ultrafast', '-tune', 'zerolatency',  // video codec config: low latency, adaptive bitrate
+			'-c:a', 'aac',// '-ar', '44100', '-b:a', '64k', // audio codec config: sampling frequency (11025, 22050, 44100), bitrate 64 kbits
+			//'-y', //force to overwrite
+			//'-use_wallclock_as_timestamps', '1', // used for audio sync
+			//'-async', '1', // used for audio sync
+			//'-filter_complex', 'aresample=44100', // resample audio to 44100Hz, needed if input is not 44100
+			//'-strict', 'experimental', 
+			'-bufsize', '5000',
+			
+			'-f', 'flv', socket._rtmpDestination
+			/*. original params
 			'-i','-',
 			'-c:v', 'libx264', '-preset', 'veryfast', '-tune', 'zerolatency',  // video codec config: low latency, adaptive bitrate
 			'-c:a', 'aac', '-ar', '44100', '-b:a', '64k', // audio codec config: sampling frequency (11025, 22050, 44100), bitrate 64 kbits
@@ -77,12 +90,14 @@ io.on('connection', function(socket){
 			//'-filter_complex', 'aresample=44100', // resample audio to 44100Hz, needed if input is not 44100
 			//'-strict', 'experimental', 
 			'-bufsize', '1000',
-			
 			'-f', 'flv', socket._rtmpDestination
+			*/
+			
 		];
 		
 		console.log(socket._rtmpDestination);
 		ffmpeg_process=spawn('ffmpeg', ops);
+		console.log("ffmpeg spawned");
 		feedStream=function(data){
 			
 			ffmpeg_process.stdin.write(data);
@@ -115,11 +130,13 @@ io.on('connection', function(socket){
 		feedStream(m);
 	});
 	socket.on('disconnect', function () {
+		console.log("socket disconnected!");
 		feedStream=false;
 		if(ffmpeg_process)
 		try{
 			ffmpeg_process.stdin.end();
 			ffmpeg_process.kill('SIGINT');
+			console.log("ffmpeg process ended!");
 		}catch(e){console.warn('killing ffmoeg process attempt failed...');}
 	});
 	socket.on('error',function(e){
@@ -136,8 +153,8 @@ io.on('error',function(e){
 //  console.log('http and websocket listening on *:8888');
 //});
 
-server.listen(8444, function(){
-  console.log('https and websocket listening on *:8444');
+server.listen(1437, function(){
+  console.log('https and websocket listening on *:1437');
 });
 
 process.on('uncaughtException', function(err) {

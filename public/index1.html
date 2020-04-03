@@ -5,6 +5,7 @@
 <head>
 	<title>Live Stream From the Browser</title>
 	<script src="socket.io.js"></script>
+	<script src="robust-websocket.js"></script>
 	<link rel="stylesheet" href="style.css">
 	<link rel="icon" href="icon.ico">
 </head>
@@ -105,7 +106,6 @@ Connect the server, then start streaming.
 
 	function video_show(stream){
 		if ("srcObject" in output_video) {
-			output_video.muted = true;
 			output_video.srcObject = stream;
 		} else {
 			output_video.src = window.URL.createObjectURL(stream);
@@ -161,10 +161,12 @@ Connect the server, then start streaming.
 		if(!MediaRecorder){fail('No MediaRecorder available.');}
 
 
-		var socketOptions = {secure: true, reconnection: true, reconnectionDelay: 1000, timeout:15000, pingTimeout: 15000, pingInterval: 45000};
+		var socketOptions = {secure: true, reconnection: true, reconnectionDelay: 100, timeout:15000, pingTimeout: 15000, pingInterval: 45000};
 		
 		//start socket connection
-		socket = io.connect(socketio_address.value, socketOptions);
+		console.log(socketio_address.value);
+		var socket = new RobustWebSocket(socketio_address.value);
+		//socket = io.connect(socketio_address.value, socketOptions);
 		// console.log("ping interval =", socket.pingInterval, " ping TimeOut" = socket.pingTimeout);
  		//output_message.innerHTML=socket;
 		
