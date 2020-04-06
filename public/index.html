@@ -24,11 +24,11 @@ To start a live stream:
 </h2>
 <hr/>	
 <br><label for="option_width" class="form">Size:</label>
-<input class="form" type="text" id="option_width" value="120"/> &times;
-<input class="form" type="text" id="option_height" value="120"/>
+<input class="form" type="text" id="option_width" value="240"/> &times;
+<input class="form" type="text" id="option_height" value="240"/>
 <br><br>
 <label class="form" for="option_framerate">Frame Rate:</label>
-<input class="form" type="text" id="option_framerate" value="12"/>
+<input class="form" type="text" id="option_framerate" value="15"/>
 <br><br>
 <input class="form" type="hidden" id="socket.io_address" value="/"/>
 <label class="form" for="option_url" >RTMP Destination:</label>
@@ -42,7 +42,7 @@ Connect the server, then start streaming.
 </div><br/>
 <button class="form" id="button_server">Connect Server</button> 
 <button class="form" id="button_start" >Start Streaming</button>
-
+<button class="form" id="button_stop" >Stop Streaming</button>
 
 <br/>
 <hr/>	
@@ -92,6 +92,7 @@ Connect the server, then start streaming.
 	option_framerate.onchange=option_framerate.onkeyup=function(){framerate=1*this.value; console.log("framerate" 	+framerate);}
 	option_url.onchange=option_url.onkeyup=function(){url=this.value;}
 	button_start.onclick=requestMedia;
+	button_stop.onclick=stopStream;
 	button_server.onclick=connect_server;
 	var oo=document.getElementById("checkbox_Reconection");
 	//just start the server
@@ -102,7 +103,7 @@ Connect the server, then start streaming.
 	console.log("state initiated = " +state); 
  	var t;
 	button_start.disabled=true;
-
+	button_stop.disabled=true;
 	function video_show(stream){
 		if ("srcObject" in output_video) {
 			output_video.muted = true;
@@ -242,6 +243,7 @@ Connect the server, then start streaming.
 	state="ready";
 	console.log("state = " +state);
 	button_start.disabled=false;
+	button_stop.disabled=false;
 	button_server.disabled=true;
 	output_message.innerHTML="connect server successful";
 }
@@ -266,6 +268,9 @@ function requestMedia(){
 		socket.emit('start','start');
 		mediaRecorder = new MediaRecorder(stream);
 		mediaRecorder.start(1000);
+		button_stop.disabled=false;
+	 	button_start.disabled=true;
+		button_server.disabled=true;
 		
 		//show remote stream
 		var livestream = document.getElementsByClassName("Livestream");
@@ -311,13 +316,11 @@ function requestMedia(){
 
 function stopStream(){
 	console.log("stop pressed:");
-	socket.on('disconnect', function () {
-		show_output('ERROR: server disconnected!');
-		mediaRecorder.stop();
-		state="stop";
-		button_start.disabled=true;
-		button_server.disabled=false;
-	});
+	//stream.getTracks().forEach(track => track.stop())
+	mediaRecorder.stop();
+	button_stop.disabled=true;
+ button_start.disabled=true;
+button_server.disabled=false;
 }
 </script>
 
