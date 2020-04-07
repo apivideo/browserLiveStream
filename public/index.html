@@ -54,6 +54,9 @@ Connect the server, then start streaming.
 	<p id="output_message"></p>
 	
 	<video id="output_video" autoplay=true></video>
+	<svg id="recording" height="50" width="50">
+	  <circle id="recordingCircle" cx="25" cy="25" r="20" stroke="black" stroke-width="1" fill="gray" />
+	</svg>
 	<video id="videoElement" preload="none"  ></video>
 </div>
 
@@ -154,10 +157,10 @@ Connect the server, then start streaming.
 	}
 
 	function connect_server(){
-		navigator.getUserMedia = (navigator.getUserMedia ||
-                          navigator.mozGetUserMedia ||
-                          navigator.msGetUserMedia ||
-                          navigator.webkitGetUserMedia);
+		navigator.getUserMedia = (navigator.mediaDevices.getUserMedia ||
+                          navigator.mediaDevices.mozGetUserMedia ||
+                          navigator.mediaDevices.msGetUserMedia ||
+                          navigator.mediaDevices.webkitGetUserMedia);
 		if(!navigator.getUserMedia){fail('No getUserMedia() available.');}
 		if(!MediaRecorder){fail('No MediaRecorder available.');}
 
@@ -172,22 +175,26 @@ Connect the server, then start streaming.
 		socket.on('connect_timeout', (timeout) => {
    			console.log("state on connection timeout= " +timeout);
 			output_message.innerHTML="Connection timed out";
+			recordingCircle.style.fill='gray';
 			
 		});
 		socket.on('error', (error) => {
    			console.log("state on connection error= " +error);
 			output_message.innerHTML="Connection error";
+			recordingCircle.style.fill='gray';
 		});
 		
 		socket.on('connect_error', function(){ 
    			console.log("state on connection error= " +state);
 			output_message.innerHTML="Connection Failed";
+			recordingCircle.style.fill='gray';
 		});
 
 		socket.on('message',function(m){
 			console.log("state on message= " +state);
 			console.log('recv server message',m);
 			show_output('SERVER:'+m);
+			
 		});
 
 		socket.on('fatal',function(m){
@@ -198,6 +205,7 @@ Connect the server, then start streaming.
 			console.log("state on fatal error= " +state);
 			//already stopped and inactive
 			console.log('media recorder restarted');
+			recordingCircle.style.fill='gray';
 			
 			//mediaRecorder.start();
 			//state="stop";
@@ -207,9 +215,10 @@ Connect the server, then start streaming.
 			//restart the server
 	
 			if(oo.checked) {
-				timedCount();
+				//timedCount();
 				output_message.innerHTML="server is reload!";
 				console.log("server is reloading!");
+				recordingCircle.style.fill='gray';
 			}
 			//should reload?
 		});
@@ -223,6 +232,7 @@ Connect the server, then start streaming.
 		console.log("state disconec= " +state);
 		show_output('ERROR: server disconnected!');
 		console.log('ERROR: server disconnected!' +reason);
+		recordingCircle.style.fill='gray';
 		//reconnect the server
 		connect_server();
 		
@@ -234,7 +244,7 @@ Connect the server, then start streaming.
 		//	document.getElementById('button_start').disabled=true;　
 		//var oo=document.getElementById("checkbox_Reconection");
 		if(oo.checked) {
-			timedCount();
+			//timedCount();
 			output_message.innerHTML="server is reloading!";
 			console.log("server is reloading!");
 		}
@@ -263,7 +273,7 @@ function requestMedia(){
 		//let supported = navigator.mediaDevices.getSupportedConstraints();
 		//console.log(supported);
 		video_show(stream);//only show locally, not remotely
-	
+		recordingCircle.style.fill='red';
 		socket.emit('config_rtmpDestination',url);
 		socket.emit('start','start');
 		mediaRecorder = new MediaRecorder(stream);
@@ -318,6 +328,7 @@ function stopStream(){
 	console.log("stop pressed:");
 	//stream.getTracks().forEach(track => track.stop())
 	mediaRecorder.stop();
+	recordingCircle.style.fill='gray';
 	button_stop.disabled=true;
  button_start.disabled=true;
 button_server.disabled=false;
