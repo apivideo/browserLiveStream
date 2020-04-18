@@ -28,7 +28,7 @@ To start a live stream:
 <input class="form" type="text" id="option_height" value="240"/>
 <br><br>
 <label class="form" for="option_framerate">Frame Rate:</label>
-<input class="form" type="text" id="option_framerate" value="15"/>
+<input class="form" type="text" id="option_framerate" value="1"/>
 <br><br>
 <label class="form" for="option_framerate">Audio bitrate:</label>
 <select class="form" id="option_bitrate">
@@ -39,7 +39,7 @@ To start a live stream:
 <br><br>
 <input class="form" type="hidden" id="socket.io_address" value="/"/>
 <label class="form" for="option_url" >RTMP Destination:</label>
-<input class="form" type="text" id="option_url" style="width:33%" value="rtmp://broadcast.api.video/s/30087931-229e-42cf-b5f9-e91bcc1f7332"/>
+<input class="form" type="text" id="option_url" style="width:33%" value="rtmp://broadcast.api.video/s/3175cd1b-01a3-451f-a2fc-7832a366717b"/>
 <br>
 <input class="form" type="checkbox"  id="checkbox_Reconection" checked="true">
 <label class="form">Reconnection </label>
@@ -80,33 +80,34 @@ Connect the server, then start streaming.
 
 	function fail(str){alert(str+"\nUnable to access the camera Please ensure you are on HTTPS and using Firefox or Chrome.");location.replace('http://mozilla.org/firefox');}
 	
-var output_console=document.getElementById('output_console'),
-	output_message=document.getElementById('output_message'),
-	output_video=document.getElementById('output_video'),
-	option_url=document.getElementById('option_url'),
-	socketio_address=document.getElementById('socket.io_address'),
-	option_width=document.getElementById('option_width'),
-	option_height=document.getElementById('option_height'),
-	option_framerate=document.getElementById('option_framerate'),
-    option_bitrate=document.getElementById('option_bitrate'),
-	button_start=document.getElementById('button_start'),
-	height=parseInt(option_height.value),
-	width=parseInt(option_width.value),
-	framerate=parseInt(option_framerate.value),
-	audiobitrate = parseInt(option_bitrate.value),
-	//url=option_url.value='rtmp://'+location.host.split(':')[0]+':1935/live/test0';
-	url=option_url.value;
-
-console.log("framerate", framerate);
-option_height.onchange=option_height.onkeyup=function(){height=1*this.value;}
-option_width.onchange=option_width.onkeyup=function(){width=1*this.value; console.log("width" +width);}
-option_framerate.onchange=option_framerate.onkeyup=function(){framerate=1*this.value; console.log("framerate" 	+framerate);}
-	option_bitrate.onchange=option_bitrate.onkeyup=function(){audiobitrate=1*this.value; console.log("bitrate" 	+audiobitrate);}
-option_url.onchange=option_url.onkeyup=function(){url=this.value;}
-button_start.onclick=requestMedia;
-button_stop.onclick=stopStream;
-button_server.onclick=connect_server;
-var oo=document.getElementById("checkbox_Reconection");
+	
+	var output_console=document.getElementById('output_console'),
+		output_message=document.getElementById('output_message'),
+		output_video=document.getElementById('output_video'),
+		option_url=document.getElementById('option_url'),
+		socketio_address=document.getElementById('socket.io_address'),
+		option_width=document.getElementById('option_width'),
+		option_height=document.getElementById('option_height'),
+		option_framerate=document.getElementById('option_framerate'),
+	    option_bitrate=document.getElementById('option_bitrate'),
+		button_start=document.getElementById('button_start'),
+		height=parseInt(option_height.value),
+		width=parseInt(option_width.value),
+		framerate=parseInt(option_framerate.value),
+		audiobitrate = parseInt(option_bitrate.value),
+		//url=option_url.value='rtmp://'+location.host.split(':')[0]+':1935/live/test0';
+		url=option_url.value;
+	
+	console.log("framerate", framerate);
+	option_height.onchange=option_height.onkeyup=function(){height=1*this.value;}
+	option_width.onchange=option_width.onkeyup=function(){width=1*this.value; console.log("width" +width);}
+	option_framerate.onchange=option_framerate.onkeyup=function(){framerate=1*this.value; console.log("framerate" 	+framerate);}
+		option_bitrate.onchange=option_bitrate.onkeyup=function(){audiobitrate=1*this.value; console.log("bitrate" 	+audiobitrate);}
+	option_url.onchange=option_url.onkeyup=function(){url=this.value;}
+	button_start.onclick=requestMedia;
+	button_stop.onclick=stopStream;
+	button_server.onclick=connect_server;
+	var oo=document.getElementById("checkbox_Reconection");
 	//just start the server
 	//connect_server;
 	var mediaRecorder;
