@@ -1,0 +1,55 @@
+{
+  "accountId": "fec57ce7-d161-4c8f-8da0-1ebf841f4739",
+  "amount": 100,
+  "auth": true,
+  "brand": {
+    "id": "0b7b83a3-ccb3-4854-804a-90e5d951d1eb",
+    "logoURL": null,
+    "metadata": null,
+    "name": "Doug's Lemonade Stand"
+  },
+  "card": {
+    "firstNumbers": "340000",
+    "id": "922831e0-2da2-4758-897f-10290790ae67",
+    "lastNumbers": "0333",
+    "metadata": {
+      "customKey1": "customValue1",
+      "customKey2": "customValue2",
+      "id": "this-is-the-metadata-id"
+    },
+    "scheme": "amex"
+  },
+  "cleared": false,
+  "created": "2020-04-27T17:51:43.647Z",
+  "currency": "EUR",
+  "datetime": "2020-04-27T18:51:43",
+  "id": "a0cc678e-7da6-490f-8f53-48b76ce39666",
+  "identifiers": {
+    "MID": "TEST_MID_5dba7a08-8355-434a-8fb0-f3878f8258be",
+    "amexApprovalCode": null,
+    "mastercardRefNumber": null,
+    "mastercardTransactionSequenceNumber": null,
+    "visaAuthCode": null
+  },
+  "location": {
+    "address": "14 Rainbow end",
+    "city": "Sligo",
+    "countryCode": "IRL",
+    "geolocation": null,
+    "id": "aee4f683-1b5a-477d-9c3d-21e9f442dbb2",
+    "metadata": null,
+    "postcode": "F91W540",
+    "timezone": "Europe/London"
+  },
+  "offer": {
+    "cashback": 25,
+    "id": "b6a559e0-c1c3-430d-b681-616aaec4e0c3",
+    "message": [],
+    "performanceFee": 3,
+    "qualificationDate": null,
+    "qualified": true
+  },
+  "programId": "6139f5b1-ea74-44f3-b5b3-86268dcfc4d7",
+  "updated": "2020-04-27T17:51:44.110Z",
+  "wallet": null
+}

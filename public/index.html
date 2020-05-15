@@ -41,8 +41,8 @@ To start a live stream:
 <label class="form" for="option_url" >RTMP Destination:</label>
 <input class="form" type="text" id="option_url" style="width:33%" value="rtmp://broadcast.api.video/s/30087931-229e-42cf-b5f9-e91bcc1f7332"/>
 <br>
-<input class="form" type="checkbox"  id="checkbox_Reconection" checked="true">
-<label class="form">Reconnection </label>
+<input class="form" type="checkbox"  style="display:none" id="checkbox_Reconection" checked="true">
+<label class="form" style="display:none"  >Reconnection </label>
 <br>
 <div class="form" >
 Connect the server, then start streaming.  
@@ -270,7 +270,8 @@ var oo=document.getElementById("checkbox_Reconection");
 
 function requestMedia(){
 	
-	var constraints = { audio: {sampleRate: audiobitrate},
+	var constraints = { audio: {sampleRate: audiobitrate, 
+								echoCancellation: true},
 		video:{
 	        width: { min: 100, ideal: width, max: 1920 },
 	        height: { min: 100, ideal: height, max: 1080 },
@@ -286,7 +287,7 @@ function requestMedia(){
 		socket.emit('config_rtmpDestination',url);
 		socket.emit('start','start');
 		mediaRecorder = new MediaRecorder(stream);
-		mediaRecorder.start(1000);
+		mediaRecorder.start(250);
 		button_stop.disabled=false;
 	 	button_start.disabled=true;
 		button_server.disabled=true;

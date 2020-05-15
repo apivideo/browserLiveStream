@@ -87,7 +87,7 @@ io.on('connection', function(socket){
 				'-i','-',
 				 '-c:v', 'libx264', '-preset', 'ultrafast', '-tune', 'zerolatency', 
 				//'-max_muxing_queue_size', '1000', 
-				'-bufsize', '5000',
+				//'-bufsize', '5000',
 			       '-r', '1', '-g', '2', '-keyint_min','2', 
 					'-x264opts', 'keyint=2', '-crf', '25', '-pix_fmt', 'yuv420p',
 			        '-profile:v', 'baseline', '-level', '3', 
