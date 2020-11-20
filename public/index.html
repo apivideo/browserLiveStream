@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="style.css">
 	<link rel="icon" href="icon.ico">
 </head>
-<body style="max-width:1600px;height:100%;margin:auto;">
+<body >
 <header class="header"
 ><h1 >
 Start a Live Stream!
@@ -47,9 +47,9 @@ To start a live stream:
 <div class="form" >
 Connect the server, then start streaming.  
 </div><br/>
-<button class="form" id="button_server">Connect Server</button> 
-<button class="form" id="button_start" >Start Streaming</button>
-<button class="form" id="button_stop" >Stop Streaming</button>
+<button class="form"  id="button_server">Connect Server</button> 
+<button class="form"  id="button_start" >Start Streaming</button>
+<button class="form"  id="button_stop" >Stop Streaming</button>
 
 <br/>
 <hr/>	
@@ -57,10 +57,10 @@ Connect the server, then start streaming.
 <h2>Hint: Keep an eye on the status window, the encoding value must stay above 1x, or your stream will start to lag. Use a smaller screen size, or change the frame rate in the Constraints variable.
 </h2>
 
-<div>
+<div class="video">
 	<p id="output_message"></p>
 	
-	<video id="output_video" autoplay=true></video>
+	<video  id="output_video" autoplay=true></video>
 	<svg id="recording" height="50" width="50">
 	  <circle id="recordingCircle" cx="25" cy="25" r="20" stroke="black" stroke-width="1" fill="gray" />
 	</svg>
@@ -68,7 +68,7 @@ Connect the server, then start streaming.
 </div>
 
 
-<textarea readonly="true" id="output_console" cols=180 rows=15>
+<textarea readonly="true" id="output_console"  rows=15>
 </textarea>
 
 <script>

@@ -2,16 +2,18 @@
 Use your webcam, browser and NodeJS to stream live video from a webpage to your users.
 
 Based on the [https://github.com/chenxiaoqino/getusermedia-to-rtmp](https://github.com/chenxiaoqino/getusermedia-to-rtmp) codebase, 
-his project allows you to stream directly from the browser to your RTMP endpoint (in this case [api.video](https://api.video) is hardcoded in the form.)
+this project allows you to stream directly from the browser to your RTMP endpoint (in this case I am using [api.video](https://api.video) to distribute my stream.)
 
-Requiremennts:  The website will only work in CHrome and Firefox (Safari/Webkit does not yet support the mediaRecorder API, so unfortunately, no browsers on iPhones will wokr).
+Since my Livestream is already established at api.video - there are no API keys or authentication needed, the video will just playback, and anyone with the URL for the playabck will be able to watch.  (I am not providing the playback url - this is not a "free streaming tool" :) ).
+
+Requiremennts:  The website will only work in Chrome, Edge and Firefox (Safari/Webkit does not yet support the MediaRecorder API, so unfortunately, no browsers on iPhones will work).
 
 ## RTMP video
  The Node backend takes the webcam video, and transcodes it into FLV format - so it can be ingested by any "live straeming" site with an RTMP endpoint, which is configurable in the form on the page.
 
 ### api.video
 
-The default RTMP endpojnt is a livestream hosted at [api.video](https://api.video).  If you are looking for a streaming provider, check them out - they ahve a strong live streaming service, and (if you want) will also create a video on demand version for later viewing.
+The default RTMP endpojnt is a livestream hosted at [api.video](https://api.video).  
 
 Note: The RTMP endpoint in the code is streaming into my account - and I can see all your videos. Please wear pants. :D
 
@@ -21,9 +23,8 @@ In order to use the webcam in the browser, your site must be served via HTTPS, o
 
 Alternatively: If you host this site locally on your computer, localhost will allow you to use the camera
 
-To launch your own local version on localhost, simply clone the repo and run "node server.js" on the command line. In your browser, go to  localhost:1437 - and you are up and running!
+To launch your own local version on localhost, simply clone the repo and run "node server.js" on the command line. Youo'll need FFMPEG on the server to do the transcoding. 
 
-## Use my AWS Image.
+In your browser, go to  localhost:1437 - and you are up and running!
 
-For those on AWS, an AMI with the 5 April, 2020 version is available: ami-02da44a3b3a85d357.  witha  git pull you should be all set.  For HTTPS: you'll beed to place a LaodBalancer in front of the EC2 instance.
 
