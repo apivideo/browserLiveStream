@@ -34,3 +34,6 @@ clone the repo
 npm install (for all dependencies)
 install ffmpeg
 node server.js
+
+## Try it out!
+This is running at https://livestream.a.video
