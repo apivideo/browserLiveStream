@@ -69,3 +69,8 @@ button{
 #output_console{
   width:100%;
 }
+#footer{
+  font-size: large;
+  color: black;
+  padding:10px;
+}

@@ -7,6 +7,26 @@
 	<script src="socket.io.js"></script>
 	<link rel="stylesheet" href="style.css">
 	<link rel="icon" href="icon.ico">
+	<script>
+		var __nspid="isrtzw";
+		var __nsptags=[];
+		(function(w, d) { var x = function() {
+		var j=d.createElement("script");j.type="text/javascript";j.async=true;
+		j.src="http"+("https:"===d.location.protocol?"s://cs":"://c")+".ns1p.net/p.js?a="+__nspid;
+		d.body.appendChild(j); }
+		if(w.addEventListener) { w.addEventListener("load", x, false); }
+		else if(w.attachEvent) { w.attachEvent("onload", x); }
+		else { w.onload = x; }
+		}(window, document));
+	</script>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-N9E9YP1HGF"></script>
+	<script>
+  		window.dataLayer = window.dataLayer || [];
+  		function gtag(){dataLayer.push(arguments);}
+  		gtag('js', new Date());
+  		gtag('config', 'G-N9E9YP1HGF');
+	</script>
 </head>
 <body >
 <header class="header"
@@ -70,7 +90,12 @@ Connect the server, then start streaming.
 
 <textarea readonly="true" id="output_console"  rows=15>
 </textarea>
+<div id="footer">
+	This app was created with <a href="https://api.video">api.video</a>.<br/>
+	Get the <a href="https://github.com/dougsillars/browserLiveStream">sample code</a>, and read about <a href="https://a.video/works/livestream-a-video">how we built the demo.</a><br/>
+	More sample apps can be found at <a href="https://a.video">a.video</a>.
 
+</div>
 <script>
 
 //	var constraints = navigator.mediaDevices.getSupportedConstraints();
