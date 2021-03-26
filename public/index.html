@@ -41,6 +41,7 @@ To start a live stream:
 <li> Enter the RTMP Destination for your api.video stream.  You'll find this at by clicking on your <a href="https://go.api.video/livestreams/">livestream</a>.<br/></li>
 <li> When you are ready press "Start Streaming."</li>
 </ul>
+If you'd like to share your screen & camera, try <a href="https://record.a.video?live=true">record.a.video</a>
 </h2>
 <hr/>	
 <br><label for="option_width" class="form">Size:</label>
@@ -257,39 +258,39 @@ var oo=document.getElementById("checkbox_Reconection");
 			//should reload?
 		});
 		
-	socket.on('ffmpeg_stderr',function(m){
-		//this is the ffmpeg output for each frame
-		show_output('FFMPEG:'+m);	
-	});
+		socket.on('ffmpeg_stderr',function(m){
+			//this is the ffmpeg output for each frame
+			show_output('FFMPEG:'+m);	
+		});
 
-	socket.on('disconnect', function (reason) {
-		console.log("state disconec= " +state);
-		show_output('ERROR: server disconnected!');
-		console.log('ERROR: server disconnected!' +reason);
-		recordingCircle.style.fill='gray';
-		//reconnect the server
-		connect_server();
-		
-		//socket.open();
-		//mediaRecorder.stop();
-		//state="stop";
-		//button_start.disabled=true;
-    	//button_server.disabled=false;
-		//	document.getElementById('button_start').disabled=true;　
-		//var oo=document.getElementById("checkbox_Reconection");
-		if(oo.checked) {
-			//timedCount();
-			output_message.innerHTML="server is reloading!";
-			console.log("server is reloading!");
-		}
-	});
+		socket.on('disconnect', function (reason) {
+			console.log("state disconec= " +state);
+			show_output('ERROR: server disconnected!');
+			console.log('ERROR: server disconnected!' +reason);
+			recordingCircle.style.fill='gray';
+			//reconnect the server
+			connect_server();
+			
+			//socket.open();
+			//mediaRecorder.stop();
+			//state="stop";
+			//button_start.disabled=true;
+			//button_server.disabled=false;
+			//	document.getElementById('button_start').disabled=true;　
+			//var oo=document.getElementById("checkbox_Reconection");
+			if(oo.checked) {
+				//timedCount();
+				output_message.innerHTML="server is reloading!";
+				console.log("server is reloading!");
+			}
+		});
 	
-	state="ready";
-	console.log("state = " +state);
-	button_start.disabled=false;
-	button_stop.disabled=false;
-	button_server.disabled=true;
-	output_message.innerHTML="connect server successful";
+		state="ready";
+		console.log("state = " +state);
+		button_start.disabled=false;
+		button_stop.disabled=false;
+		button_server.disabled=true;
+		output_message.innerHTML="connect server successful";
 }
 
 
@@ -344,7 +345,7 @@ function requestMedia(){
 		//document.getElementById('button_start').disabled=false;　
 
 		mediaRecorder.ondataavailable = function(e) {
-		
+			console.log(e.data);
 		  socket.emit("binarystream",e.data);
 		  state="start";
 		  //chunks.push(e.data);
