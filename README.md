@@ -1,3 +1,5 @@
+> March 2021:  If you'd like to share your screen & camera with a livestream, check out [record.a.video](https://record.a.video).  Code is related to this repo, but [updated](https://github.com/dougsillars/recordavideo).
+
 # browserLiveStream
 Use your webcam, browser and NodeJS to stream live video from a webpage to your users.
 
