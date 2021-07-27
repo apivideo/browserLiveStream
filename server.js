@@ -197,7 +197,7 @@ io.on('error',function(e){
 //  console.log('http and websocket listening on *:8888');
 //});
 
-server.listen(1437, function(){
+server.listen(process.env.PORT || 1437, function(){
   console.log('https and websocket listening on *:1437');
 });
 
