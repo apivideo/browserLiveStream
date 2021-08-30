@@ -9,23 +9,14 @@ var spawn = require('child_process').spawn;
 var fs = require('fs');
 var https = require('https');
 app.use(express.static('public'));
-/*
+
 const server = require('http').createServer(//{
  //key: fs.readFileSync('abels-key.pem'),
  // cert: fs.readFileSync('abels-cert.pem')
  
 	//},
 	app);
-*/
-var options = {
-	key: fs.readFileSync('server.key'),
-	cert: fs.readFileSync('server.cert')
-  };
-  console.log("opgtions",options);
- server = https.createServer(options, app).listen(1437);
 
-
-//testing
 
 var io = require('socket.io')(server);
 spawn('ffmpeg',['-h']).on('error',function(m){
@@ -203,14 +194,11 @@ io.on('error',function(e){
 	console.log('socket.io error:'+e);
 });
 
-//http.listen(8888, function(){
-//  console.log('http and websocket listening on *:8888');
-//});
-/*
+
 server.listen(process.env.PORT || 1437, function(){
   console.log('https and websocket listening on *:1437');
 });
-*/
+
 process.on('uncaughtException', function(err) {
     // handle the error safely
     console.log(err)
