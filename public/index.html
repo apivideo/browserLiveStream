@@ -81,7 +81,7 @@ Connect the server, then start streaming.
 <div class="video">
 	<p id="output_message"></p>
 	
-	<video  id="output_video" autoplay=true></video>
+	<video  id="output_video" playsinline muted autoplay></video>
 	<svg id="recording" height="50" width="50">
 	  <circle id="recordingCircle" cx="25" cy="25" r="20" stroke="black" stroke-width="1" fill="gray" />
 	</svg>
@@ -146,6 +146,7 @@ var oo=document.getElementById("checkbox_Reconection");
 		if ("srcObject" in output_video) {
 			output_video.muted = true;
 			output_video.srcObject = stream;
+			
 		} else {
 			output_video.src = window.URL.createObjectURL(stream);
 		}
