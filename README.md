@@ -47,8 +47,11 @@ In your browser, go to  localhost:1437 - and you are up and running!
 ## installation
 
 clone the repo
+
 npm install (for all dependencies)
+
 install ffmpeg
+
 node server.js
 
 ## Try it out!
