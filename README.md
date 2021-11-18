@@ -44,7 +44,7 @@ To launch your own local version on localhost, simply clone the repo and run "no
 In your browser, go to  localhost:1437 - and you are up and running!
 
 
-##installation
+## installation
 
 clone the repo
 npm install (for all dependencies)
