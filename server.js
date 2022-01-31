@@ -1,18 +1,17 @@
 var express = require('express');
 var app = express();
-//var http = require('http').Server(app);
-//var ffmpeg = require('fluent-ffmpeg');
-//var stream = require('stream');
+// var http = require('http').Server(app);
+// var ffmpeg = require('fluent-ffmpeg');
+// var stream = require('stream');
 var spawn = require('child_process').spawn;
 var fs = require('fs');
 var https = require('https');
 app.use(express.static('public'));
 
 const server = require('http').createServer(//{
-	//key: fs.readFileSync('abels-key.pem'),
-	// cert: fs.readFileSync('abels-cert.pem')
-
-	//},
+	// key: fs.readFileSync('abels-key.pem'),
+	//  cert: fs.readFileSync('abels-cert.pem')
+	// },
 	app);
 
 var io = require('socket.io')(server);
@@ -31,7 +30,7 @@ io.on('connection', function (socket) {
 			socket.emit('fatal', 'rtmp destination setup error.');
 			return;
 		}
-		var regexValidator = /^rtmp:\/\/[^\s]*$/;//TODO: should read config
+		var regexValidator = /^rtmp:\/\/[^\s]*$/; // TODO: should read config
 		if (!regexValidator.test(m)) {
 			socket.emit('fatal', 'rtmp address rejected.');
 			return;
@@ -39,7 +38,7 @@ io.on('connection', function (socket) {
 		socket._rtmpDestination = m;
 		socket.emit('message', 'rtmp destination set to:' + m);
 	});
-	//socket._vcodec='libvpx';//from firefox default encoder
+	// socket._vcodec='libvpx'; // from firefox default encoder
 	socket.on('config_vcodec', function (m) {
 		if (typeof m != 'string') {
 			socket.emit('fatal', 'input codec setup error.');
@@ -48,13 +47,12 @@ io.on('connection', function (socket) {
 		if (!/^[0-9a-z]{2,}$/.test(m)) {
 			socket.emit('fatal', 'input codec contains illegal character?.');
 			return;
-		}//for safety
+		}// for safety
 		socket._vcodec = m;
 	});
 
 	socket.on('start', function (m) {
 		if (ffmpeg_process || feedStream) {
-
 			socket.emit('fatal', 'stream already started.');
 			return;
 		}
@@ -75,13 +73,13 @@ io.on('connection', function (socket) {
 		}
 		console.log(audioEncoding, audioBitrate);
 		console.log('framerate on node side', framerate);
-		//var ops = [];
+		// var ops = [];
 		if (framerate == 1) {
 			var ops = [
 				'-i', '-',
 				'-c:v', 'libx264', '-preset', 'ultrafast', '-tune', 'zerolatency',
-				//'-max_muxing_queue_size', '1000', 
-				//'-bufsize', '5000',
+				// '-max_muxing_queue_size', '1000', 
+				// '-bufsize', '5000',
 				'-r', '1', '-g', '2', '-keyint_min', '2',
 				'-x264opts', 'keyint=2', '-crf', '25', '-pix_fmt', 'yuv420p',
 				'-profile:v', 'baseline', '-level', '3',
@@ -129,7 +127,6 @@ io.on('connection', function (socket) {
 				'-bufsize', '1000',
 				'-f', 'flv', socket._rtmpDestination
 				*/
-
 			];
 		}
 		console.log("ops", ops);
@@ -137,9 +134,8 @@ io.on('connection', function (socket) {
 		ffmpeg_process = spawn('ffmpeg', ops);
 		console.log("ffmpeg spawned");
 		feedStream = function (data) {
-
 			ffmpeg_process.stdin.write(data);
-			//write exception cannot be caught here.	
+			// write exception cannot be caught here.	
 		}
 
 		ffmpeg_process.stderr.on('data', function (d) {
@@ -180,7 +176,6 @@ io.on('connection', function (socket) {
 	});
 
 	socket.on('error', function (e) {
-
 		console.log('socket.io error:' + e);
 	});
 });
