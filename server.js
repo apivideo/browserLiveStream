@@ -1,11 +1,11 @@
-var express = require('express');
-var app = express();
-// var http = require('http').Server(app);
-// var ffmpeg = require('fluent-ffmpeg');
-// var stream = require('stream');
-var spawn = require('child_process').spawn;
-var fs = require('fs');
-var https = require('https');
+const express = require('express');
+const app = express();
+// const http = require('http').Server(app);
+// const ffmpeg = require('fluent-ffmpeg');
+// const stream = require('stream');
+const spawn = require('child_process').spawn;
+const fs = require('fs');
+const https = require('https');
 app.use(express.static('public'));
 
 const server = require('http').createServer(//{
@@ -14,7 +14,7 @@ const server = require('http').createServer(//{
 	// },
 	app);
 
-var io = require('socket.io')(server);
+const io = require('socket.io')(server);
 spawn('ffmpeg', ['-h']).on('error', function (m) {
 	console.error("FFMpeg not found in system cli; please install ffmpeg properly or make a softlink to ./!");
 	process.exit(-1);
@@ -24,13 +24,13 @@ io.on('connection', function (socket) {
 	socket.emit('message', 'Hello from mediarecorder-to-rtmp server!');
 	socket.emit('message', 'Please set rtmp destination before start streaming.');
 
-	var ffmpeg_process, feedStream = false;
+	let ffmpeg_process, feedStream = false;
 	socket.on('config_rtmpDestination', function (m) {
 		if (typeof m != 'string') {
 			socket.emit('fatal', 'rtmp destination setup error.');
 			return;
 		}
-		var regexValidator = /^rtmp:\/\/[^\s]*$/; // TODO: should read config
+		const regexValidator = /^rtmp:\/\/[^\s]*$/; // TODO: should read config
 		if (!regexValidator.test(m)) {
 			socket.emit('fatal', 'rtmp address rejected.');
 			return;
@@ -61,9 +61,9 @@ io.on('connection', function (socket) {
 			return;
 		}
 
-		var framerate = socket.handshake.query.framespersecond;
-		var audioBitrate = parseInt(socket.handshake.query.audioBitrate);
-		var audioEncoding = "64k";
+		const framerate = socket.handshake.query.framespersecond;
+		const audioBitrate = parseInt(socket.handshake.query.audioBitrate);
+		let audioEncoding = "64k";
 		if (audioBitrate == 11025) {
 			audioEncoding = "11k";
 		} else if (audioBitrate == 22050) {
@@ -73,9 +73,9 @@ io.on('connection', function (socket) {
 		}
 		console.log(audioEncoding, audioBitrate);
 		console.log('framerate on node side', framerate);
-		// var ops = [];
+		let ops;
 		if (framerate == 1) {
-			var ops = [
+			ops = [
 				'-i', '-',
 				'-c:v', 'libx264', '-preset', 'ultrafast', '-tune', 'zerolatency',
 				// '-max_muxing_queue_size', '1000', 
@@ -88,7 +88,7 @@ io.on('connection', function (socket) {
 			];
 
 		} else if (framerate == 15) {
-			var ops = [
+			ops = [
 				'-i', '-',
 				'-c:v', 'libx264', '-preset', 'ultrafast', '-tune', 'zerolatency',
 				'-max_muxing_queue_size', '1000',
@@ -101,7 +101,7 @@ io.on('connection', function (socket) {
 			];
 
 		} else {
-			var ops = [
+			ops = [
 				'-i', '-',
 				//'-c', 'copy', 
 				'-c:v', 'libx264', '-preset', 'ultrafast', '-tune', 'zerolatency',  // video codec config: low latency, adaptive bitrate
