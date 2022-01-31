@@ -1,8 +1,6 @@
 var express = require('express');
 var app = express();
 //var http = require('http').Server(app);
-
-
 //var ffmpeg = require('fluent-ffmpeg');
 //var stream = require('stream');
 var spawn = require('child_process').spawn;
@@ -17,19 +15,15 @@ const server = require('http').createServer(//{
 	//},
 	app);
 
-
 var io = require('socket.io')(server);
 spawn('ffmpeg', ['-h']).on('error', function (m) {
 	console.error("FFMpeg not found in system cli; please install ffmpeg properly or make a softlink to ./!");
 	process.exit(-1);
 });
 
-
 io.on('connection', function (socket) {
 	socket.emit('message', 'Hello from mediarecorder-to-rtmp server!');
 	socket.emit('message', 'Please set rtmp destination before start streaming.');
-
-
 
 	var ffmpeg_process, feedStream = false;
 	socket.on('config_rtmpDestination', function (m) {
@@ -57,7 +51,6 @@ io.on('connection', function (socket) {
 		}//for safety
 		socket._vcodec = m;
 	});
-
 
 	socket.on('start', function (m) {
 		if (ffmpeg_process || feedStream) {
@@ -174,6 +167,7 @@ io.on('connection', function (socket) {
 		}
 		feedStream(m);
 	});
+
 	socket.on('disconnect', function () {
 		console.log("socket disconnected!");
 		feedStream = false;
@@ -184,6 +178,7 @@ io.on('connection', function (socket) {
 				console.log("ffmpeg process ended!");
 			} catch (e) { console.warn('killing ffmoeg process attempt failed...'); }
 	});
+
 	socket.on('error', function (e) {
 
 		console.log('socket.io error:' + e);
@@ -193,7 +188,6 @@ io.on('connection', function (socket) {
 io.on('error', function (e) {
 	console.log('socket.io error:' + e);
 });
-
 
 server.listen(process.env.PORT || 1437, function () {
 	console.log('https and websocket listening on *:1437');
