@@ -1,6 +1,4 @@
 <!doctype>
-
-
 <html>
 <head>
 	<title>Live Stream From the Browser</title>
@@ -9,341 +7,346 @@
 	<link rel="icon" href="icon.ico">
 </head>
 <body style="max-width:1600px;height:100%;margin:auto;">
-<header class="header"
-><h1 >
-Start a Live Stream!
-</h1 >
-</header>
-<h2>
-To start a live stream:
-<ul>
-	<li>Choose the size of the video you are uploading.  Big is awesome, but too big, and the server cannot transcode the video fast enough.</li>
-<li> Enter the RTMP Destination for your api.video stream.  You'll find this at by clicking on your <a href="https://go.api.video/livestreams/">livestream</a>.<br/></li>
-<li> When you are ready press "Start Streaming."</li>
-</ul>
-</h2>
-<hr/>	
-<br><label for="option_width" class="form">Size:</label>
-<input class="form" type="text" id="option_width" value="240"/> &times;
-<input class="form" type="text" id="option_height" value="240"/>
-<br><br>
-<label class="form" for="option_framerate">Frame Rate:</label>
-<input class="form" type="text" id="option_framerate" value="1"/>
-<br><br>
-<label class="form" for="option_framerate">Audio bitrate:</label>
-<select class="form" id="option_bitrate">
-  <option value="22050">22050</option>
-  <option value="44100">44100</option>
-  <option value="11025">11025</option>
-</select>
-<br><br>
-<input class="form" type="hidden" id="socket.io_address" value="/"/>
-<label class="form" for="option_url" >RTMP Destination:</label>
-<input class="form" type="text" id="option_url" style="width:33%" value="rtmp://broadcast.api.video/s/3175cd1b-01a3-451f-a2fc-7832a366717b"/>
-<br>
-<input class="form" type="checkbox"  id="checkbox_Reconection" checked="true">
-<label class="form">Reconnection </label>
-<br>
-<div class="form" >
-Connect the server, then start streaming.  
-</div><br/>
-<button class="form" id="button_server">Connect Server</button> 
-<button class="form" id="button_start" >Start Streaming</button>
-<button class="form" id="button_stop" >Stop Streaming</button>
+	<header class="header">
+		<h1>
+			Start a Live Stream!
+		</h1>
+	</header>
+	<h2>
+		To start a live stream:
+		<ul>
+			<li>Choose the size of the video you are uploading. Big is awesome, but too big, and the server cannot
+				transcode the video fast enough.</li>
+			<li> Enter the RTMP Destination for your api.video stream. You'll find this at by clicking on your <a
+					href="https://go.api.video/livestreams/">livestream</a>.<br /></li>
+			<li> When you are ready press "Start Streaming."</li>
+		</ul>
+	</h2>
+	<hr />
+	<br><label for="option_width" class="form">Size:</label>
+	<input class="form" type="text" id="option_width" value="240" /> &times;
+	<input class="form" type="text" id="option_height" value="240" />
+	<br><br>
+	<label class="form" for="option_framerate">Frame Rate:</label>
+	<input class="form" type="text" id="option_framerate" value="1" />
+	<br><br>
+	<label class="form" for="option_framerate">Audio bitrate:</label>
+	<select class="form" id="option_bitrate">
+		<option value="22050">22050</option>
+		<option value="44100">44100</option>
+		<option value="11025">11025</option>
+	</select>
+	<br><br>
+	<input class="form" type="hidden" id="socket.io_address" value="/" />
+	<label class="form" for="option_url">RTMP Destination:</label>
+	<input class="form" type="text" id="option_url" style="width:33%"
+		value="rtmp://broadcast.api.video/s/3175cd1b-01a3-451f-a2fc-7832a366717b" />
+	<br>
+	<input class="form" type="checkbox" id="checkbox_Reconection" checked="true">
+	<label class="form">Reconnection </label>
+	<br>
+	<div class="form">
+		Connect the server, then start streaming.
+	</div><br />
+	<button class="form" id="button_server">Connect Server</button>
+	<button class="form" id="button_start">Start Streaming</button>
+	<button class="form" id="button_stop">Stop Streaming</button>
 
-<br/>
-<hr/>	
+	<br />
+	<hr />
 
-<h2>Hint: Keep an eye on the status window, the encoding value must stay above 1x, or your stream will start to lag. Use a smaller screen size, or change the frame rate in the Constraints variable.
-</h2>
+	<h2>Hint: Keep an eye on the status window, the encoding value must stay above 1x, or your stream will start to lag.
+		Use a smaller screen size, or change the frame rate in the Constraints variable.
+	</h2>
 
-<div>
-	<p id="output_message"></p>
-	
-	<video id="output_video" autoplay=true></video>
-	<svg id="recording" height="50" width="50">
-	  <circle id="recordingCircle" cx="25" cy="25" r="20" stroke="black" stroke-width="1" fill="gray" />
-	</svg>
-	<video id="videoElement" preload="none"  ></video>
-</div>
+	<div>
+		<p id="output_message"></p>
+
+		<video id="output_video" autoplay=true></video>
+		<svg id="recording" height="50" width="50">
+			<circle id="recordingCircle" cx="25" cy="25" r="20" stroke="black" stroke-width="1" fill="gray" />
+		</svg>
+		<video id="videoElement" preload="none"></video>
+	</div>
 
 
-<textarea readonly="true" id="output_console" cols=180 rows=15>
+	<textarea readonly="true" id="output_console" cols=180 rows=15>
 </textarea>
 
-<script>
+	<script>
 
-//	var constraints = navigator.mediaDevices.getSupportedConstraints();
-//	console.log("constraints", constraints);
-//	console.log("constraints", constraints.frameRate.value);
+		//	var constraints = navigator.mediaDevices.getSupportedConstraints();
+		//	console.log("constraints", constraints);
+		//	console.log("constraints", constraints.frameRate.value);
 
 
-	function fail(str){alert(str+"\nUnable to access the camera Please ensure you are on HTTPS and using Firefox or Chrome.");location.replace('http://mozilla.org/firefox');}
-	
-	
-	var output_console=document.getElementById('output_console'),
-		output_message=document.getElementById('output_message'),
-		output_video=document.getElementById('output_video'),
-		option_url=document.getElementById('option_url'),
-		socketio_address=document.getElementById('socket.io_address'),
-		option_width=document.getElementById('option_width'),
-		option_height=document.getElementById('option_height'),
-		option_framerate=document.getElementById('option_framerate'),
-	    option_bitrate=document.getElementById('option_bitrate'),
-		button_start=document.getElementById('button_start'),
-		height=parseInt(option_height.value),
-		width=parseInt(option_width.value),
-		framerate=parseInt(option_framerate.value),
-		audiobitrate = parseInt(option_bitrate.value),
-		//url=option_url.value='rtmp://'+location.host.split(':')[0]+':1935/live/test0';
-		url=option_url.value;
-	
-	console.log("framerate", framerate);
-	option_height.onchange=option_height.onkeyup=function(){height=1*this.value;}
-	option_width.onchange=option_width.onkeyup=function(){width=1*this.value; console.log("width" +width);}
-	option_framerate.onchange=option_framerate.onkeyup=function(){framerate=1*this.value; console.log("framerate" 	+framerate);}
-		option_bitrate.onchange=option_bitrate.onkeyup=function(){audiobitrate=1*this.value; console.log("bitrate" 	+audiobitrate);}
-	option_url.onchange=option_url.onkeyup=function(){url=this.value;}
-	button_start.onclick=requestMedia;
-	button_stop.onclick=stopStream;
-	button_server.onclick=connect_server;
-	var oo=document.getElementById("checkbox_Reconection");
-	//just start the server
-	//connect_server;
-	var mediaRecorder;
- 	var socket ;
- 	var state ="stop";
-	console.log("state initiated = " +state); 
- 	var t;
-	button_start.disabled=true;
-	button_stop.disabled=true;
-	function video_show(stream){
-		if ("srcObject" in output_video) {
-			output_video.muted = true;
-			output_video.srcObject = stream;
-		} else {
-			output_video.src = window.URL.createObjectURL(stream);
+		function fail(str) { alert(str + "\nUnable to access the camera Please ensure you are on HTTPS and using Firefox or Chrome."); location.replace('http://mozilla.org/firefox'); }
+
+
+		var output_console = document.getElementById('output_console'),
+			output_message = document.getElementById('output_message'),
+			output_video = document.getElementById('output_video'),
+			option_url = document.getElementById('option_url'),
+			socketio_address = document.getElementById('socket.io_address'),
+			option_width = document.getElementById('option_width'),
+			option_height = document.getElementById('option_height'),
+			option_framerate = document.getElementById('option_framerate'),
+			option_bitrate = document.getElementById('option_bitrate'),
+			button_start = document.getElementById('button_start'),
+			height = parseInt(option_height.value),
+			width = parseInt(option_width.value),
+			framerate = parseInt(option_framerate.value),
+			audiobitrate = parseInt(option_bitrate.value),
+			//url=option_url.value='rtmp://'+location.host.split(':')[0]+':1935/live/test0';
+			url = option_url.value;
+
+		console.log("framerate", framerate);
+		option_height.onchange = option_height.onkeyup = function () { height = 1 * this.value; }
+		option_width.onchange = option_width.onkeyup = function () { width = 1 * this.value; console.log("width" + width); }
+		option_framerate.onchange = option_framerate.onkeyup = function () { framerate = 1 * this.value; console.log("framerate" + framerate); }
+		option_bitrate.onchange = option_bitrate.onkeyup = function () { audiobitrate = 1 * this.value; console.log("bitrate" + audiobitrate); }
+		option_url.onchange = option_url.onkeyup = function () { url = this.value; }
+		button_start.onclick = requestMedia;
+		button_stop.onclick = stopStream;
+		button_server.onclick = connect_server;
+		var oo = document.getElementById("checkbox_Reconection");
+		//just start the server
+		//connect_server;
+		var mediaRecorder;
+		var socket;
+		var state = "stop";
+		console.log("state initiated = " + state);
+		var t;
+		button_start.disabled = true;
+		button_stop.disabled = true;
+		function video_show(stream) {
+			if ("srcObject" in output_video) {
+				output_video.muted = true;
+				output_video.srcObject = stream;
+			} else {
+				output_video.src = window.URL.createObjectURL(stream);
+			}
+			output_video.addEventListener("loadedmetadata", function (e) {
+				//console.log(output_video);
+				output_message.innerHTML = "Local video source size:" + output_video.videoWidth + "x" + output_video.videoHeight;
+			}, false);
 		}
-  	  output_video.addEventListener( "loadedmetadata", function (e) {
-	  		//console.log(output_video);
-			output_message.innerHTML="Local video source size:"+output_video.videoWidth+"x"+output_video.videoHeight ;
-		}, false );
-	}
 
-	function show_output(str){
-		output_console.value+="\n"+str;
-		output_console.scrollTop = output_console.scrollHeight;
-	};
+		function show_output(str) {
+			output_console.value += "\n" + str;
+			output_console.scrollTop = output_console.scrollHeight;
+		};
 
 
-	function timedCount(){
-		var oo=document.getElementById("checkbox_Reconection");
-		if(oo.checked) {
-			console.log("timed count state = " +state);
- 	   	 	if(state=="ready"  ){ 
-				console.log("reconnecting and restarting the media stream");
- 		  		//do I need to rerun the request media?
-			 
-				connect_server();
- 		   		button_start.disabled=false;
-				button_server.disabled=true;
- 	   		}	
- 	  		else{
-				console.log("not ready yet - wating 1000ms");
-  				t=setTimeout("timedCount()",1000);
-  		  	  connect_server();
-				output_message.innerHTML="try connect server ...";
-				button_start.disabled=true;
-				button_server.disabled=false;
- 	   	 }
- 		}
- 		else
- 			{
+		function timedCount() {
+			var oo = document.getElementById("checkbox_Reconection");
+			if (oo.checked) {
+				console.log("timed count state = " + state);
+				if (state == "ready") {
+					console.log("reconnecting and restarting the media stream");
+					//do I need to rerun the request media?
+
+					connect_server();
+					button_start.disabled = false;
+					button_server.disabled = true;
+				}
+				else {
+					console.log("not ready yet - wating 1000ms");
+					t = setTimeout("timedCount()", 1000);
+					connect_server();
+					output_message.innerHTML = "try connect server ...";
+					button_start.disabled = true;
+					button_server.disabled = false;
+				}
+			}
+			else {
 				//reconnection is off
 				console.log("reconnection is off, buttons hcnage and we are done.");
-				button_start.disabled=true;
-				button_server.disabled=false;
- 			}
-	}
-
-	function connect_server(){
-		navigator.getUserMedia = (navigator.mediaDevices.getUserMedia ||
-                          navigator.mediaDevices.mozGetUserMedia ||
-                          navigator.mediaDevices.msGetUserMedia ||
-                          navigator.mediaDevices.webkitGetUserMedia);
-		if(!navigator.getUserMedia){fail('No getUserMedia() available.');}
-		if(!MediaRecorder){fail('No MediaRecorder available.');}
-
-
-		var socketOptions = {secure: true, reconnection: true, reconnectionDelay: 1000, timeout:15000, pingTimeout: 15000, pingInterval: 45000,query: {framespersecond: framerate, audioBitrate: audiobitrate}};
-		
-		//start socket connection
-		socket = io.connect(socketio_address.value, socketOptions);
-		// console.log("ping interval =", socket.pingInterval, " ping TimeOut" = socket.pingTimeout);
- 		//output_message.innerHTML=socket;
-		
-		socket.on('connect_timeout', (timeout) => {
-   			console.log("state on connection timeout= " +timeout);
-			output_message.innerHTML="Connection timed out";
-			recordingCircle.style.fill='gray';
-			
-		});
-		socket.on('error', (error) => {
-   			console.log("state on connection error= " +error);
-			output_message.innerHTML="Connection error";
-			recordingCircle.style.fill='gray';
-		});
-		
-		socket.on('connect_error', function(){ 
-   			console.log("state on connection error= " +state);
-			output_message.innerHTML="Connection Failed";
-			recordingCircle.style.fill='gray';
-		});
-
-		socket.on('message',function(m){
-			console.log("state on message= " +state);
-			console.log('recv server message',m);
-			show_output('SERVER:'+m);
-			
-		});
-
-		socket.on('fatal',function(m){
-
-			show_output('Fatal ERROR: unexpected:'+m);
-			//alert('Error:'+m);
-			console.log("fatal socket error!!", m);
-			console.log("state on fatal error= " +state);
-			//already stopped and inactive
-			console.log('media recorder restarted');
-			recordingCircle.style.fill='gray';
-			
-			//mediaRecorder.start();
-			//state="stop";
-			//button_start.disabled=true;
-			//button_server.disabled=false;
-			//document.getElementById('button_start').disabled=true;　
-			//restart the server
-	
-			if(oo.checked) {
-				//timedCount();
-				output_message.innerHTML="server is reload!";
-				console.log("server is reloading!");
-				recordingCircle.style.fill='gray';
+				button_start.disabled = true;
+				button_server.disabled = false;
 			}
-			//should reload?
-		});
-		
-	socket.on('ffmpeg_stderr',function(m){
-		//this is the ffmpeg output for each frame
-		show_output('FFMPEG:'+m);	
-	});
-
-	socket.on('disconnect', function (reason) {
-		console.log("state disconec= " +state);
-		show_output('ERROR: server disconnected!');
-		console.log('ERROR: server disconnected!' +reason);
-		recordingCircle.style.fill='gray';
-		//reconnect the server
-		connect_server();
-		
-		//socket.open();
-		//mediaRecorder.stop();
-		//state="stop";
-		//button_start.disabled=true;
-    	//button_server.disabled=false;
-		//	document.getElementById('button_start').disabled=true;　
-		//var oo=document.getElementById("checkbox_Reconection");
-		if(oo.checked) {
-			//timedCount();
-			output_message.innerHTML="server is reloading!";
-			console.log("server is reloading!");
 		}
-	});
-	
-	state="ready";
-	console.log("state = " +state);
-	button_start.disabled=false;
-	button_stop.disabled=false;
-	button_server.disabled=true;
-	output_message.innerHTML="connect server successful";
-}
+
+		function connect_server() {
+			navigator.getUserMedia = (navigator.mediaDevices.getUserMedia ||
+				navigator.mediaDevices.mozGetUserMedia ||
+				navigator.mediaDevices.msGetUserMedia ||
+				navigator.mediaDevices.webkitGetUserMedia);
+			if (!navigator.getUserMedia) { fail('No getUserMedia() available.'); }
+			if (!MediaRecorder) { fail('No MediaRecorder available.'); }
 
 
-function requestMedia(){
-	
-	var constraints = { audio: {sampleRate: audiobitrate},
-		video:{
-	        width: { min: 100, ideal: width, max: 1920 },
-	        height: { min: 100, ideal: height, max: 1080 },
-			frameRate: {ideal: framerate}
-	    }
-	};
-	console.log(constraints);
-	navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
-		//let supported = navigator.mediaDevices.getSupportedConstraints();
-		//console.log(supported);
-		video_show(stream);//only show locally, not remotely
-		recordingCircle.style.fill='red';
-		socket.emit('config_rtmpDestination',url);
-		socket.emit('start','start');
-		mediaRecorder = new MediaRecorder(stream);
-		mediaRecorder.start(1000);
-		button_stop.disabled=false;
-	 	button_start.disabled=true;
-		button_server.disabled=true;
-		
-		//show remote stream
-		var livestream = document.getElementsByClassName("Livestream");
-		console.log("adding live stream");
-		livestream.innerHtml = "test";
+			var socketOptions = { secure: true, reconnection: true, reconnectionDelay: 1000, timeout: 15000, pingTimeout: 15000, pingInterval: 45000, query: { framespersecond: framerate, audioBitrate: audiobitrate } };
 
-		mediaRecorder.onstop = function(e) {
-			console.log("stopped!");
-			console.log(e);
-			//stream.stop();
-				
+			//start socket connection
+			socket = io.connect(socketio_address.value, socketOptions);
+			// console.log("ping interval =", socket.pingInterval, " ping TimeOut" = socket.pingTimeout);
+			//output_message.innerHTML=socket;
+
+			socket.on('connect_timeout', (timeout) => {
+				console.log("state on connection timeout= " + timeout);
+				output_message.innerHTML = "Connection timed out";
+				recordingCircle.style.fill = 'gray';
+
+			});
+			socket.on('error', (error) => {
+				console.log("state on connection error= " + error);
+				output_message.innerHTML = "Connection error";
+				recordingCircle.style.fill = 'gray';
+			});
+
+			socket.on('connect_error', function () {
+				console.log("state on connection error= " + state);
+				output_message.innerHTML = "Connection Failed";
+				recordingCircle.style.fill = 'gray';
+			});
+
+			socket.on('message', function (m) {
+				console.log("state on message= " + state);
+				console.log('recv server message', m);
+				show_output('SERVER:' + m);
+
+			});
+
+			socket.on('fatal', function (m) {
+
+				show_output('Fatal ERROR: unexpected:' + m);
+				//alert('Error:'+m);
+				console.log("fatal socket error!!", m);
+				console.log("state on fatal error= " + state);
+				//already stopped and inactive
+				console.log('media recorder restarted');
+				recordingCircle.style.fill = 'gray';
+
+				//mediaRecorder.start();
+				//state="stop";
+				//button_start.disabled=true;
+				//button_server.disabled=false;
+				//document.getElementById('button_start').disabled=true;　
+				//restart the server
+
+				if (oo.checked) {
+					//timedCount();
+					output_message.innerHTML = "server is reload!";
+					console.log("server is reloading!");
+					recordingCircle.style.fill = 'gray';
+				}
+				//should reload?
+			});
+
+			socket.on('ffmpeg_stderr', function (m) {
+				//this is the ffmpeg output for each frame
+				show_output('FFMPEG:' + m);
+			});
+
+			socket.on('disconnect', function (reason) {
+				console.log("state disconec= " + state);
+				show_output('ERROR: server disconnected!');
+				console.log('ERROR: server disconnected!' + reason);
+				recordingCircle.style.fill = 'gray';
+				//reconnect the server
+				connect_server();
+
+				//socket.open();
+				//mediaRecorder.stop();
+				//state="stop";
+				//button_start.disabled=true;
+				//button_server.disabled=false;
+				//	document.getElementById('button_start').disabled=true;　
+				//var oo=document.getElementById("checkbox_Reconection");
+				if (oo.checked) {
+					//timedCount();
+					output_message.innerHTML = "server is reloading!";
+					console.log("server is reloading!");
+				}
+			});
+
+			state = "ready";
+			console.log("state = " + state);
+			button_start.disabled = false;
+			button_stop.disabled = false;
+			button_server.disabled = true;
+			output_message.innerHTML = "connect server successful";
 		}
-		
-		mediaRecorder.onpause = function(e) {
-			console.log("media recorder paused!!");
-			console.log(e);
-			//stream.stop();
-				
+
+
+		function requestMedia() {
+
+			var constraints = {
+				audio: { sampleRate: audiobitrate },
+				video: {
+					width: { min: 100, ideal: width, max: 1920 },
+					height: { min: 100, ideal: height, max: 1080 },
+					frameRate: { ideal: framerate }
+				}
+			};
+			console.log(constraints);
+			navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+				//let supported = navigator.mediaDevices.getSupportedConstraints();
+				//console.log(supported);
+				video_show(stream);//only show locally, not remotely
+				recordingCircle.style.fill = 'red';
+				socket.emit('config_rtmpDestination', url);
+				socket.emit('start', 'start');
+				mediaRecorder = new MediaRecorder(stream);
+				mediaRecorder.start(1000);
+				button_stop.disabled = false;
+				button_start.disabled = true;
+				button_server.disabled = true;
+
+				//show remote stream
+				var livestream = document.getElementsByClassName("Livestream");
+				console.log("adding live stream");
+				livestream.innerHtml = "test";
+
+				mediaRecorder.onstop = function (e) {
+					console.log("stopped!");
+					console.log(e);
+					//stream.stop();
+
+				}
+
+				mediaRecorder.onpause = function (e) {
+					console.log("media recorder paused!!");
+					console.log(e);
+					//stream.stop();
+
+				}
+
+				mediaRecorder.onerror = function (event) {
+					let error = event.error;
+					console.log("error", error.name);
+
+				};
+				//document.getElementById('button_start').disabled=false;　
+
+				mediaRecorder.ondataavailable = function (e) {
+
+					socket.emit("binarystream", e.data);
+					state = "start";
+					//chunks.push(e.data);
+				}
+			}).catch(function (err) {
+				console.log('The following error occured: ' + err);
+				show_output('Local getUserMedia ERROR:' + err);
+				output_message.innerHTML = "Local video source size is not support or No camera ?" + output_video.videoWidth + "x" + output_video.videoHeight;
+				state = "stop";
+				button_start.disabled = true;
+				button_server.disabled = false;
+			});
 		}
-		
-		mediaRecorder.onerror = function(event) {
-			let error = event.error;
-			console.log("error", error.name);
 
-  	  };	
-		//document.getElementById('button_start').disabled=false;　
-
-		mediaRecorder.ondataavailable = function(e) {
-		
-		  socket.emit("binarystream",e.data);
-		  state="start";
-		  //chunks.push(e.data);
+		function stopStream() {
+			console.log("stop pressed:");
+			//stream.getTracks().forEach(track => track.stop())
+			mediaRecorder.stop();
+			recordingCircle.style.fill = 'gray';
+			button_stop.disabled = true;
+			button_start.disabled = true;
+			button_server.disabled = false;
 		}
-	}).catch(function(err) {
-		console.log('The following error occured: ' + err);
-		show_output('Local getUserMedia ERROR:'+err);
-		output_message.innerHTML="Local video source size is not support or No camera ?"+output_video.videoWidth+"x"+output_video.videoHeight;
-		 state="stop";
-		 button_start.disabled=true;
-		button_server.disabled=false;
-	});
-}
-
-function stopStream(){
-	console.log("stop pressed:");
-	//stream.getTracks().forEach(track => track.stop())
-	mediaRecorder.stop();
-	recordingCircle.style.fill='gray';
-	button_stop.disabled=true;
- button_start.disabled=true;
-button_server.disabled=false;
-}
-</script>
+	</script>
 
 </body>
+
 </html>
